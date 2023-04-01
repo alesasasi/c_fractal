@@ -1,6 +1,6 @@
 #include "mandelbrot.h"
 
-void sdl_draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double center, double zoom)
+void draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double center, double zoom)
 {
     int x, y;
     int maxiter = (WIDTH/2) * 0.049715909 * log10(zoom);
@@ -52,7 +52,7 @@ void handle_keydown(SDL_Keycode key, complex double *center, double *zoom, SDL_W
         case SDLK_SPACE:
             *center = START_POS;
             *zoom = START_ZOOM;
-            sdl_draw_mandelbrot(window, surface, *center, *zoom);
+            draw_mandelbrot(window, surface, *center, *zoom);
             break;
 
         case SDLK_ESCAPE:
@@ -70,5 +70,5 @@ void handle_mousebutton(SDL_MouseButtonEvent button, complex double *center, dou
     else if (button.button == SDL_BUTTON_RIGHT)
         *zoom /= ZOOM_FACTOR;
 
-    sdl_draw_mandelbrot(window, surface, *center, *zoom);
+    draw_mandelbrot(window, surface, *center, *zoom);
 }

@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     double complex center = START_POS;
     double zoom = START_ZOOM;
 
-    sdl_draw_mandelbrot(window, surface, center, zoom);
+    draw_mandelbrot(window, surface, center, zoom);
 
     SDL_Event event;
     int quit = 0;

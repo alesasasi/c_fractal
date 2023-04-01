@@ -17,7 +17,7 @@
 
 #define ZOOM_FACTOR 4
 
-void sdl_draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double center, double zoom);
+void draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double center, double zoom);
 void handle_keydown(SDL_Keycode key, complex double *center, double *zoom, SDL_Window *window, SDL_Surface *surface);
 void handle_mousebutton(SDL_MouseButtonEvent button, complex double *center, double *zoom, SDL_Window *window, SDL_Surface *surface);
 

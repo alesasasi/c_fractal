@@ -12,23 +12,62 @@ void draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double ce
     {
         for (x = 0; x < WIDTH; x++)
         {
-            /* Get the complex point on Gauss space to be calculated */
             complex double c = creal(center) + ((x - (WIDTH/2))/zoom) +
                 ((cimag(center) + ((y - (HEIGHT/2))/zoom))*_Complex_I);
-            complex double z = c;
-
+            complex double z = 0;
             int n;
+
             for (n = 0; n < maxiter; n++)
             {
                 z = z*z + c;
-                if (cabs(z) > BAIL_OUT)
+                if (creal(z)*creal(z) + cimag(z)*cimag(z) > BAIL_OUT)
                     break;
             }
 
             C = n - log2f(logf(cabs(z)) / M_LN2 );
 
-            /* Paint the pixel calculated depending on the number
-            of iterations found */
+            ((Uint32*)surface->pixels)[(y * surface->w) + x] = (n >= maxiter) ? 0 :
+                SDL_MapRGB(surface->format,
+                    (1+sin(C*0.27 + 5)) * 127.0f,
+                    (1+cos(C*0.85)) * 127.0f,
+                    (1+sin(C*0.15)) * 127.0f
+                );
+        }
+        rects[y/FLIPS].x = 0;
+        rects[y/FLIPS].y = y;
+        rects[y/FLIPS].w = WIDTH;
+        rects[y/FLIPS].h = 1;
+    }
+
+    SDL_UpdateWindowSurface(window);
+    SDL_Delay(1);
+    SDL_UpdateWindowSurfaceRects(window, rects, HEIGHT/FLIPS);
+}
+
+void draw_julia(SDL_Window *window, SDL_Surface *surface, complex double c, double zoom)
+{
+    int x, y;
+    int maxiter = (WIDTH/2) * 0.049715909 * log10(zoom);
+    float C;
+
+    static SDL_Rect rects[HEIGHT/FLIPS];
+
+    for (y = 0; y < HEIGHT; y++)
+    {
+        for (x = 0; x < WIDTH; x++)
+        {
+            complex double z = (x - (WIDTH/2)) / zoom + ((y - (HEIGHT/2)) / zoom) * _Complex_I;
+            int n;
+
+            for (n = 0; n < maxiter; n++)
+            {
+                z = z * z + c;
+                if (creal(z)*creal(z) + cimag(z)*cimag(z) > BAIL_OUT)
+                    break;
+            }
+
+            C = n - log2f(logf(cabs(z)) / M_LN2 );
+
             ((Uint32*)surface->pixels)[(y * surface->w) + x] = (n >= maxiter) ? 0 :
                 SDL_MapRGB(surface->format,
                     (1+sin(C*0.27 + 5)) * 127.0f,

@@ -2,11 +2,8 @@
 This is a C program that generates fractal images using the Mandelbrot set. It requires the SDL2 library to run.
 
 ## Installation
-Before compiling the program, you need to install the SDL2 library. You can install it by running the following command:
+Download the source code from this page
 
-```bash
-sudo apt-get install libsdl2-dev
-```
 ## Usage
 To compile the program, navigate to the program directory in your terminal and run the following command:
 

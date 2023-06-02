@@ -1,5 +1,14 @@
 #include "mandelbrot.h"
 
+
+static inline double my_creal(complex double z) {
+    return creal(z);
+}
+
+static inline double my_cimag(complex double z) {
+    return cimag(z);
+}
+
 void draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double center, double zoom)
 {
     int x, y;
@@ -8,19 +17,21 @@ void draw_mandelbrot(SDL_Window *window, SDL_Surface *surface, complex double ce
 
     static SDL_Rect rects[HEIGHT/FLIPS];
 
+    #pragma omp parallel for private(x, C)
     for (y = 0; y < HEIGHT; y++)
     {
+        complex double c_im = (my_cimag(center) + ((y - (HEIGHT/2))/zoom))*_Complex_I;
         for (x = 0; x < WIDTH; x++)
         {
-            complex double c = creal(center) + ((x - (WIDTH/2))/zoom) +
-                ((cimag(center) + ((y - (HEIGHT/2))/zoom))*_Complex_I);
+            complex double c_re = creal(center) + ((x - (WIDTH/2))/zoom);
+            complex double c = c_re + c_im;
             complex double z = 0;
             int n;
 
             for (n = 0; n < maxiter; n++)
             {
                 z = z*z + c;
-                if (creal(z)*creal(z) + cimag(z)*cimag(z) > BAIL_OUT)
+                if (my_creal(z)*my_creal(z) + my_cimag(z)*my_cimag(z) > BAIL_OUT)
                     break;
             }
 
@@ -52,6 +63,7 @@ void draw_julia(SDL_Window *window, SDL_Surface *surface, complex double c, doub
 
     static SDL_Rect rects[HEIGHT/FLIPS];
 
+    #pragma omp parallel for private(x, C)
     for (y = 0; y < HEIGHT; y++)
     {
         for (x = 0; x < WIDTH; x++)
@@ -62,7 +74,7 @@ void draw_julia(SDL_Window *window, SDL_Surface *surface, complex double c, doub
             for (n = 0; n < maxiter; n++)
             {
                 z = z * z + c;
-                if (creal(z)*creal(z) + cimag(z)*cimag(z) > BAIL_OUT)
+                if (my_creal(z)*my_creal(z) + my_cimag(z)*my_cimag(z) > BAIL_OUT)
                     break;
             }
 

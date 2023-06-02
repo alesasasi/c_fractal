@@ -2,16 +2,10 @@
 #define MANDELBROT_H
 
 #include <SDL.h>
+#include <omp.h>
 
 #include <math.h>
 #include <complex.h>
-
-/*
-#define WIDTH 800
-#define HEIGHT 600
-#define BAIL_OUT 2.0
-#define FLIPS 24
-*/
 
 #define WIDTH 800
 #define HEIGHT 600
